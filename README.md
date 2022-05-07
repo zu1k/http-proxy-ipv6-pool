@@ -2,6 +2,8 @@
 
 Make every request from a separate IPv6 address.
 
+https://zu1k.com/posts/tutorials/http-proxy-ipv6-pool/
+
 ## Tutorial
 
 Assuming you already have an entire IPv6 subnet routed to your server, for me I purchased [Vultr's server](https://www.vultr.com/?ref=9039594-8H) to get one.

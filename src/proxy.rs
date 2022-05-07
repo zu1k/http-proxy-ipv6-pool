@@ -64,6 +64,7 @@ impl Proxy {
         let bind_addr = get_rand_ipv6(self.ipv6, self.prefix_len);
         let mut http = HttpConnector::new();
         http.set_local_address(Some(bind_addr));
+        println!("{} via {bind_addr}", req.uri().host().unwrap_or_default());
 
         let client = Client::builder()
             .http1_title_case_headers(true)

@@ -1,0 +1,23 @@
+[package]
+name = "http-proxy-ipv6-pool"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+async-trait = "0.1"
+async-compression = { version = "0.3", features = ["tokio", "brotli", "gzip", "zlib", "zstd"] }
+env_logger = "0.9"
+futures = "0.3"
+http = "0.2"
+hyper = { version = "0.14", features = ["full"] }
+log = "0.4"
+tokio = { version = "1", features = ["full"] }
+rand = "0.8.5"
+
+
+[profile.release]
+strip = true
+lto = true
+opt-level = "s"
+codegen-units = 1

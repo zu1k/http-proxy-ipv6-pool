@@ -2,18 +2,20 @@
 name = "http-proxy-ipv6-pool"
 version = "0.1.0"
 edition = "2021"
+authors = ["zu1k <i@lgf.im>"]
+description = "Http proxy, every request from a separate IPv6 address."
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/zu1k/http-proxy-ipv6-pool"
+repository = "https://github.com/zu1k/http-proxy-ipv6-pool"
 
 
 [dependencies]
-async-trait = "0.1"
-async-compression = { version = "0.3", features = ["tokio", "brotli", "gzip", "zlib", "zstd"] }
-env_logger = "0.9"
-futures = "0.3"
-http = "0.2"
-hyper = { version = "0.14", features = ["full"] }
-log = "0.4"
-tokio = { version = "1", features = ["full"] }
-rand = "0.8.5"
+cidr = "0.2"
+getopts = "0.2"
+hyper = { version = "0.14", features = ["client", "server", "http1", "runtime"] }
+tokio = { version = "1", features = ["net", "rt-multi-thread", "macros", "io-util"] }
+rand = "0.8"
 
 
 [profile.release]

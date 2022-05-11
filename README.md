@@ -20,10 +20,9 @@ $ ip a
     ......
 ```
 
-Bind the whole IPv6 /64 subnet to loopback interface, and add route via default internet interface
+Add route via default internet interface
 
 ```sh
-ip add add local 2001:19f0:6001:48e4::/64 dev lo
 ip route add local 2001:19f0:6001:48e4::/64 dev enp1s0
 ```
 

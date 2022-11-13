@@ -107,8 +107,10 @@ fn get_rand_ipv6(ipv6: [u8; 16], prefix_len: u8) -> IpAddr {
     let mut ipv6 = ipv6;
     let mut rng = rand::thread_rng();
 
+    // Count full bytes of the network part
     let net_part = (prefix_len + 7) / 8;
-    let las = prefix_len & 8;
+    // Get the number of network bits in the last byte
+    let las = prefix_len % 8;
 
     let mut cur = 15;
     while cur > net_part - 1 {

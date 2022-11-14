@@ -18,7 +18,7 @@ pub async fn start_proxy(
     let make_service = make_service_fn(move |_: &AddrStream| async move {
         Ok::<_, hyper::Error>(service_fn(move |req| {
             Proxy {
-                ipv6: ipv6.octets(),
+                ipv6: ipv6.into(),
                 prefix_len,
             }
             .proxy(req)
@@ -35,7 +35,7 @@ pub async fn start_proxy(
 
 #[derive(Clone)]
 pub(crate) struct Proxy {
-    pub ipv6: [u8; 16],
+    pub ipv6: u128,
     pub prefix_len: u8,
 }
 
@@ -98,31 +98,15 @@ impl Proxy {
     }
 }
 
-fn get_rand_ipv6_socket_addr(ipv6: [u8; 16], prefix_len: u8) -> SocketAddr {
+fn get_rand_ipv6_socket_addr(ipv6: u128, prefix_len: u8) -> SocketAddr {
     let mut rng = rand::thread_rng();
     SocketAddr::new(get_rand_ipv6(ipv6, prefix_len), rng.gen::<u16>())
 }
 
-fn get_rand_ipv6(ipv6: [u8; 16], prefix_len: u8) -> IpAddr {
-    let mut ipv6 = ipv6;
-    let mut rng = rand::thread_rng();
-
-    // Count full bytes of the network part
-    let net_part = (prefix_len + 7) / 8;
-    // Get the number of network bits in the last byte
-    let las = prefix_len % 8;
-
-    let mut cur = 15;
-    while cur > net_part - 1 {
-        ipv6[cur as usize] = rng.gen();
-        cur -= 1;
-    }
-
-    if las > 0 {
-        let mix: u8 = rng.gen();
-        ipv6[cur as usize] = ipv6[cur as usize] + mix >> las;
-    }
-
-    let ipv6 = Ipv6Addr::from(ipv6);
-    IpAddr::V6(ipv6)
+fn get_rand_ipv6(mut ipv6: u128, prefix_len: u8) -> IpAddr {
+    let rand: u128 = rand::thread_rng().gen();
+    let net_part = (ipv6 >> (128 - prefix_len)) << (128 - prefix_len);
+    let host_part = (rand << prefix_len) >> prefix_len;
+    ipv6 = net_part + host_part;
+    IpAddr::V6(ipv6.into())
 }

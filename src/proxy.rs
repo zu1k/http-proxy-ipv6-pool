@@ -107,6 +107,6 @@ fn get_rand_ipv6(mut ipv6: u128, prefix_len: u8) -> IpAddr {
     let rand: u128 = rand::thread_rng().gen();
     let net_part = (ipv6 >> (128 - prefix_len)) << (128 - prefix_len);
     let host_part = (rand << prefix_len) >> prefix_len;
-    ipv6 = net_part + host_part;
+    ipv6 = net_part | host_part;
     IpAddr::V6(ipv6.into())
 }

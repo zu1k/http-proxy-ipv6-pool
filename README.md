@@ -8,7 +8,7 @@ https://zu1k.com/posts/tutorials/http-proxy-ipv6-pool/
 
 Assuming you already have an entire IPv6 subnet routed to your server, for me I purchased [Vultr's server](https://www.vultr.com/?ref=9039594-8H) to get one.
 
-Get your IPv6 subnet prefix, for me is `2001:19f0:6001:48e4::/64`.
+Get your IPv6 subnet prefix and interface name, for me is `2001:19f0:6001:48e4::/64` and `enp1s0`.
 
 ```sh
 $ ip a
@@ -44,16 +44,23 @@ then edit `/etc/ndppd.conf`:
 ```conf
 route-ttl 30000
 
-proxy eth0 {
+proxy <INTERFACE-NAME> {
     router no
     timeout 500
     ttl 30000
 
-    rule 2001:19f0:6001:48e4::/64 {
+    rule <IP6_SUBNET> {
         static
     }
 }
 ```
+(edit the file to match your configuration)
+
+Restart the service:
+```sh
+service ndppd restart
+```
+
 
 Now you can test by using `curl`:
 
